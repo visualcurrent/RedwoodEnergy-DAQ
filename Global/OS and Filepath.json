@@ -1,0 +1,135 @@
+[
+    {
+        "id": "f1e302457ce86f5d",
+        "type": "group",
+        "z": "15422813903d4da1",
+        "name": "OS and Filepath",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "069f27534143eb1f",
+            "1d36056aa8ccf8c5",
+            "75e5231a74c3b240"
+        ],
+        "x": 234,
+        "y": 171.5,
+        "w": 512,
+        "h": 97
+    },
+    {
+        "id": "069f27534143eb1f",
+        "type": "change",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "name": "Linux File System",
+        "rules": [
+            {
+                "t": "set",
+                "p": "OS.LogFileLocation",
+                "pt": "global",
+                "to": "/media/mmcblk0p1/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.DirectoryDelimeter",
+                "pt": "global",
+                "to": "/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.dbBufferDirectory",
+                "pt": "global",
+                "to": "UploadBuffer/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.BufferPrefix",
+                "pt": "global",
+                "to": "dbIngestBuffer_",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.LogNetworkLocation",
+                "pt": "global",
+                "to": "NetworkLogs/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.NetworkLog",
+                "pt": "global",
+                "to": "NetworkLog.txt",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d36056aa8ccf8c5",
+        "type": "switch",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "name": "OS test",
+        "property": "payload.length",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 440,
+        "y": 220,
+        "wires": [
+            [
+                "069f27534143eb1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "75e5231a74c3b240",
+        "type": "exec",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "command": "cd",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "1d36056aa8ccf8c5"
+            ],
+            [],
+            []
+        ]
+    }
+]
