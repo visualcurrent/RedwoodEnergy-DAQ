@@ -1,0 +1,63 @@
+[
+    {
+        "id": "069f27534143eb1f",
+        "type": "change",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "name": "Linux File System",
+        "rules": [
+            {
+                "t": "set",
+                "p": "OS.LogFileLocation",
+                "pt": "global",
+                "to": "/media/mmcblk0p1/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.DirectoryDelimeter",
+                "pt": "global",
+                "to": "/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.dbBufferDirectory",
+                "pt": "global",
+                "to": "UploadBuffer/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.BufferPrefix",
+                "pt": "global",
+                "to": "dbIngestBuffer_",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.LogNetworkLocation",
+                "pt": "global",
+                "to": "NetworkLogs/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.NetworkLog",
+                "pt": "global",
+                "to": "NetworkLog.txt",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    }
+]

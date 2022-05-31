@@ -1,0 +1,24 @@
+[
+    {
+        "id": "75e5231a74c3b240",
+        "type": "exec",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "command": "cd",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "1d36056aa8ccf8c5"
+            ],
+            [],
+            []
+        ]
+    }
+]

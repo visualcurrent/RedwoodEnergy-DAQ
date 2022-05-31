@@ -1,0 +1,34 @@
+[
+    {
+        "id": "1d36056aa8ccf8c5",
+        "type": "switch",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "name": "OS test",
+        "property": "payload.length",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 440,
+        "y": 220,
+        "wires": [
+            [
+                "069f27534143eb1f"
+            ],
+            []
+        ]
+    }
+]

@@ -1,0 +1,412 @@
+[
+    {
+        "id": "15422813903d4da1",
+        "type": "tab",
+        "label": "Global",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d25aaa314be46330",
+        "type": "group",
+        "z": "15422813903d4da1",
+        "name": "Use this for deployment (new file every month)",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "dca809f660931a99",
+            "82c331c7ad5d61ef",
+            "75797905306e9c3a"
+        ],
+        "x": 74,
+        "y": 299,
+        "w": 592,
+        "h": 82
+    },
+    {
+        "id": "aff8910aec3fd114",
+        "type": "group",
+        "z": "15422813903d4da1",
+        "name": "references",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "9406927096c58723",
+            "4e01f46a671e850d",
+            "95ebf6c8e2ba0e49"
+        ],
+        "x": 234,
+        "y": 419,
+        "w": 372,
+        "h": 162
+    },
+    {
+        "id": "f1e302457ce86f5d",
+        "type": "group",
+        "z": "15422813903d4da1",
+        "name": "OS and Filepath",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "069f27534143eb1f",
+            "1d36056aa8ccf8c5",
+            "75e5231a74c3b240"
+        ],
+        "x": 234,
+        "y": 191.5,
+        "w": 512,
+        "h": 97
+    },
+    {
+        "id": "f2c2e372f1963245",
+        "type": "change",
+        "z": "15422813903d4da1",
+        "name": "Location",
+        "rules": [
+            {
+                "t": "set",
+                "p": "location.site",
+                "pt": "global",
+                "to": "Eureka",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "location.room",
+                "pt": "global",
+                "to": "F1R1",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 320,
+        "y": 60,
+        "wires": [
+            []
+        ],
+        "info": "# Description\n\nSets metadata to differentiate logging data between various locations. Location consists of two parts:\n\n- Set the geographical or the title of a particular study site\n- Set a specific sub-location like a room or a defined area\n\nThis global reference simplifies setting up code when Node-Red is installed at the same location and sub-location as data collection.\n\nNote that this system is capable of logging data from multiple locations across a system sharing a Local Area Network (LAN). When additional locations are to be logged, modify the global location reference to describe the outside data collection sub-location. Do this inside the `Arrange Data` Function Node that exists between raw data cleaning modules and the data storage modules.\n\n# Dependencies\n\nInject node: `Boot Initialize`\n\n# Properties\n\n## Rules\n\n- Set `location.site` to the value `string`\n- Set `location.room` to the value `string`\n\n"
+    },
+    {
+        "id": "2a2c59a272114977",
+        "type": "inject",
+        "z": "15422813903d4da1",
+        "name": "Boot Initialize",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 120,
+        "y": 60,
+        "wires": [
+            [
+                "f2c2e372f1963245",
+                "789027a3a1a2656e",
+                "3be78a92ed907160",
+                "9406927096c58723",
+                "4e01f46a671e850d",
+                "95ebf6c8e2ba0e49",
+                "dca809f660931a99",
+                "75e5231a74c3b240"
+            ]
+        ],
+        "info": "# Description\n\nInitialize global variables upon system startup\n\n# Dependencies\n\nNone\n\n# Properties\n\n## Name\n\nmsg.payload = `TRUE`\n\n## Checkbox\n\n- Inject once\n\n## Repeat\n\n`none`\n\n# Input\n\nNone\n\n# Output\n\nA single msg.payload = `TRUE` upon system boot up.\n\n# Details\n\n"
+    },
+    {
+        "id": "789027a3a1a2656e",
+        "type": "change",
+        "z": "15422813903d4da1",
+        "name": "Study Parameters",
+        "rules": [
+            {
+                "t": "set",
+                "p": "parameters.TemperatureSamplingInterval",
+                "pt": "global",
+                "to": "5000",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.SamplesPerDatabaseDump",
+                "pt": "global",
+                "to": "18",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "parameters.LinesPerBuffer",
+                "pt": "global",
+                "to": "150",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 140,
+        "wires": [
+            []
+        ],
+        "info": "**TemperatureSamplingInterval**\n- Number of milliseconds between sensor sampling\n\n**SamplesPerFileDump**\n- Not currently used. Opted for greater data resilience to power outage, over SD card failure or CPU load for file writes.\n \n# Description\n\n# Dependencies\n\n## Input\n\n# Properties\n\n## Rules\n\n# Output\n\n# Details\n"
+    },
+    {
+        "id": "3be78a92ed907160",
+        "type": "function",
+        "z": "15422813903d4da1",
+        "name": "Sensor Model Spec",
+        "func": "//Example Entry:\n//  \"SensorModelNameWithNoMathCharacters-LikeDashes\": {\n//      \"SensorType\": \"Measurement Classification like Energy or Temperature\",\n//      \"signal\": Signal Quantity or msg.payload as a value, or \"Conversion equiation using (msg.payload-32)*5/9 as a string to be evaluated elsewhere\"\n//      \"units\": \"The units of the signal or pulse quantity\",\n//      \"SignificantDigits\": \"The number of useful decimal places the sensor puts out.\"\n//  }, \n\nSensor_Model = {\n\n   \"EKM25XDSE\": {                   // EKM energy meter\n        \"SensorType\": \"Energy\",\n        \"signal\": \"msg.payload * 0.00125\", \t// 800 pulses = 1 kWh --> 1 pulse = 0.00125 kWh\n        \"units\": \"kWh\",\n        \"SignificantDigits\": 5\n    },\n   \"DAE_PD-75\": { \t\t\t\t\t// DAE PD-75 Flow Meter\n        \"SensorType\": \"WaterFlow\",\n        \"signal\": \"msg.payload\", \t// Quantity = 1 Gallon per Pulse\n        \"units\": \"Gallon\",\n        \"SignificantDigits\": 1      // volume output resolution to 1/10 of a gallon\n    },\n   \"TekClamp1200A\": { \t\t\t\t\t// DAE PD-75 Flow Meter\n        \"SensorType\": \"WaterFlow\",\n        \"signal\": \"msg.payload\", \t// Quantity = 1 Gallon per Pulse\n        \"units\": \"Gallon\",\n        \"SignificantDigits\": 1      // volume output resolution to 1/10 of a gallon\n    },\n    \"LM34DZ\": {                  \t// Texas Instruments Temperature sensor\n        \"SensorType\": \"Temperature\",\n        \"signal\": \"msg.payload\",\t// Analog Conversion: T = Vout / (0.01V/F). Use the Range node for value mapping\n        \"units\": \"Farenheit\",\n        \"SignificantDigits\": 1\t\t// Temperature output resolution is to 1/10 of degree F\n    },\n    \"5TC-TT-E-24-120\": {            // Omega Thermocouple Type-E Temperature sensor\n        \"SensorType\": \"Temperature\",\n        \"signal\": \"msg.payload\",\t// Use the Range node for value mapping\n        \"units\": \"Farenheit\",\n        \"SignificantDigits\": 0\t\t// Temperature output resolution is to 1/10 of degree F\n    },\n    \"5TC-TT-T-20-120\": {            // Omega Thermocouple Type-T Temperature sensor\n        \"SensorType\": \"Temperature\",\n        \"signal\": \"msg.payload\",\t// Use the Range node for value mapping\n        \"units\": \"Farenheit\",\n        \"SignificantDigits\": 1\t\t// Use the Range node for value mapping\n    },\n    \"TC-T-type-FEP-3.3yd\": { \t\t// MN Measurement Instruments EAN:0708828923357 Type-T Sensor Probe. https://www.amazon.com/dp/B076NY9J18/ \n        \"SensorType\": \"Temperature\",\n        \"signal\": \"msg.payload\", \t// Use the Range node for value mapping\n        \"units\": \"Farenheit\",\n        \"SignificantDigits\": 1\t\t// Temperature output resolution is to 1/10 of degree F.\n    },\n    \"TC-type-K-3m\": { \t\t        // TWTADE 3M K Type-T Sensor Probe. https://www.amazon.com/dp/B07M84554V/ \n        \"SensorType\": \"Temperature\",\n        \"signal\": \"msg.payload\", \t// Use the Range node for value mapping\n        \"units\": \"Farenheit\",\n        \"SignificantDigits\": 1\t\t// Temperature output resolution is to 1/10 of degree F.\n    }\n}\n\nglobal.set(\"Sensor_Model\",Sensor_Model);  // Assign this data structure to a global variable\n\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 100,
+        "wires": [
+            []
+        ],
+        "info": "# Description\n\nA JSON data structure to organize relevant details for the sensor technologies used on site.\n\nThe set of global variables are used for several classifications for data organization, and for any initial calculations the sensor data may require.\n\n# Dependencies\n\n## Input\n\nInject node: `Boot Initialize`\n\n# Properties\n\nThis code lives in the `On Message` Tab\n\n# Output\n\n# Details\n\n## Data Structure\n\nThe structure is dependent on retaining curly bracket, double quote, colon, and comma symbol patterns. Here's an example for a two sensor:\n\n```\nSensor_Model = {\n  \"Sensor1\": {\n      \"SensorType\": \"Temperature\",\n      \"signal\": \"( msg.payload - 32 ) * 5 / 9\"\n      \"units\": \"Celsius\",\n      \"SignificantDigits\": 1\n  },\n  \"Sensor2\": {\n      \"SensorType\": \"Energy\",\n      \"signal\": \"msg.payload * 0.00125\"\n      \"units\": \"kWh\",\n      \"SignificantDigits\": 5\n  }\n}\n```\n\n## Variable Definition\n\n- `SensorModelName`: Typically assign the model number of the sensor or a clear name that provides identification of the sensor being used. It must not contain characters that could be interpreted by the code as mathematical operations (for example: dashes are commonly in model numbers. Remove them)\n- `SensorType`: Measurement Classification like \"Energy\" or \"Temperature\"\n- `signal`: Simply set this to `msg.payload` to pass the sensor data through. If the sensor data requires a conversion, enter the mathematics here. For example `msg.payload * 0.0015` might be used when a counter pulse represents a specific quantity. Or `5/9*msg.payload-32` if the sensor provides data in Farenheit but Celsius is desired. The signal data can be converted at other locations in the code but doing it once from a central spot is nicer to maintain.\n- `units`: The units of the signal or pulse quantity\n- `SignificantDigits`: An `integer>=0`. The number of useful decimal places that the sensor puts out.  Setting the number of decimal places is only included here because javascript is notorious for passing floating point errors. (SigDigits is admitedly a misnomered variable title for Decimal Places)\n"
+    },
+    {
+        "id": "dca809f660931a99",
+        "type": "function",
+        "z": "15422813903d4da1",
+        "g": "d25aaa314be46330",
+        "name": "Filename Date Component",
+        "func": "var DateNow = new Date();  // current epoch UTC \n\nvar filenameDateComponent = String(\n    DateNow.getFullYear() + \"m\" + DateNow.getMonth()\n    );\n\nglobal.set('filenameDateComponent', filenameDateComponent );\nglobal.set('OS.FilenameDateComponent', filenameDateComponent );\n\nmsg.payload = filenameDateComponent;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 380,
+        "y": 340,
+        "wires": [
+            [
+                "75797905306e9c3a"
+            ]
+        ]
+    },
+    {
+        "id": "82c331c7ad5d61ef",
+        "type": "inject",
+        "z": "15422813903d4da1",
+        "g": "d25aaa314be46330",
+        "name": "daily",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 00 * * *",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 170,
+        "y": 340,
+        "wires": [
+            [
+                "dca809f660931a99"
+            ]
+        ]
+    },
+    {
+        "id": "75797905306e9c3a",
+        "type": "debug",
+        "z": "15422813903d4da1",
+        "g": "d25aaa314be46330",
+        "name": "",
+        "active": false,
+        "console": false,
+        "complete": "true",
+        "x": 570,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "9406927096c58723",
+        "type": "function",
+        "z": "15422813903d4da1",
+        "g": "aff8910aec3fd114",
+        "name": "InfluxDB Databases Reference",
+        "func": "\nInfluxDatabases = {\n\n   \"Laptop>books>influxG2\": {\n        address:        \"http://192.168.6.6:8086/\",\n        OrgID: [[\"redwoodenergy\",\"90fa2dc9153b45c7\"]],\n        UserID: [['Gabe', '0895e7304bc6a000']],\n        buckets:[\n            ['middletown','9d0dd47674a4607a'],\n            ['marin','551bf576ef922167'],\n            ['santarosa','343c5760844c2176'],\n            ['sonoma',\"ec49bdf66f831ca7\"],\n            ['trinidad','cfe628488617b6d9']\n            ],\n        APItoken: \"_x-9vk2R8lto2esfNwNzmuM5HzXVw1PQM2mc7Jf_ar4cdKXtWAkvccHfsiAqfE74at842nIx-yv1HC5EucodjQ==\"\n    },\n   \"InfluxDBcloud2>Test_Account\": {\n        address:        \"https://us-west-2-1.aws.cloud2.influxdata.com\",\n        OrgID: [[\"ADDit\",\"04bab7de7d7c9fe8\"]],\n        UserID: [['ADDit','27855ea063585e04']],\n        buckets: [[\"portland\",\"b73e1bec0256a3eb\"]],\n        key: \"bAcy__xig9M6GGmYJzcBwNeUr1S6yl3u14a4hBgabWP_xoiiHgcD8Bg34ZAmMZ5-mvb4iwJb6UroCJoqxf04Jg==\"\n    }\n}\n\nglobal.set(\"reference.InfluxDatabases\",InfluxDatabases);\n\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 390,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4e01f46a671e850d",
+        "type": "function",
+        "z": "15422813903d4da1",
+        "g": "aff8910aec3fd114",
+        "name": "Naming Code Reference",
+        "func": "NamingCodes = {\n\n    \"code\":          \"Sensor Target Description\",\n    \"----\":          \"-------------------------\",\n    \"ColdIn\":        \"Cold water supply line in\",\n    \"HPWH\":          \"Heat Pump Water Heater\",\n    \"HPWHairIn\":     \"Air into HPWH\",\n    \"HPWHairOut\":    \"Air out of HPWH\",\n    \"HPWHwaterIn\":   \"HPWH water in\",\n    \"HPWHwaterOut\":  \"HPWH water out\",\n    \"HPWHwell\":      \"HPWH tank thermowell\",\n    \"Recirc\":        \"Recirculation loop return\",\n    \"StoreWaterOut\": \"Storage water out\",\n    \"StoreWaterIn\":  \"Storage water in\",\n    \"StoreWell\":     \"Storage tank thermowell\",\n    \"StoreWellHigh\": \"Storage tank upper thermowell\",\n    \"StoreWellLow\":  \"Storage tank lower thermowell\",\n    \"MixHotOut\":     \"Hot water supply out of mixing \",\n    \"MixHotIn\":      \"Hot water into mixing valve\",\n    \"MixColdIn\":     \"Cold water into mixing valve\",\n    \"Ambient\":       \"Ambient air temperature\",\n    \"RWH\":           \"Resistance hot water heater\",\n    \"RWHwaterIn\":    \"Resistance hot water heater in\",\n    \"RWHwaterOut\":   \"Resistance hot water heater out\"\n}\n\nglobal.set('reference.NamingCodes', NamingCodes);\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 370,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "95ebf6c8e2ba0e49",
+        "type": "function",
+        "z": "15422813903d4da1",
+        "g": "aff8910aec3fd114",
+        "name": "Nodes needing manual settings reference",
+        "func": "// These nodes have no input or way to modify properties besides a direct edit\n\nManualNodes = {\n    'Watch Node': \"Properties>Files field: \" + \n        global.get('OS.LogFileLocation') +\n        global.get('OS.dbBufferDirectory'),\n    'join Nodes': {Specifically: \"one's used for database uploads\", mode: 'Manual', \"Send the message: After a number of message parts\": \"Enter the number of samples that make the ideal packet size (rougly 9 = 1300 bytes)\",\n    'Temperature sampling interval': \"ADAM-4018 Properties\"\n    }\n}\n\nglobal.set('reference.ManualNodes', ManualNodes);\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 420,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "069f27534143eb1f",
+        "type": "change",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "name": "Linux File System",
+        "rules": [
+            {
+                "t": "set",
+                "p": "OS.LogFileLocation",
+                "pt": "global",
+                "to": "/media/mmcblk0p1/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.DirectoryDelimeter",
+                "pt": "global",
+                "to": "/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.dbBufferDirectory",
+                "pt": "global",
+                "to": "UploadBuffer/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.BufferPrefix",
+                "pt": "global",
+                "to": "dbIngestBuffer_",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.LogNetworkLocation",
+                "pt": "global",
+                "to": "NetworkLogs/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "OS.NetworkLog",
+                "pt": "global",
+                "to": "NetworkLog.txt",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d36056aa8ccf8c5",
+        "type": "switch",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "name": "OS test",
+        "property": "payload.length",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 440,
+        "y": 240,
+        "wires": [
+            [
+                "069f27534143eb1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "75e5231a74c3b240",
+        "type": "exec",
+        "z": "15422813903d4da1",
+        "g": "f1e302457ce86f5d",
+        "command": "cd",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 310,
+        "y": 240,
+        "wires": [
+            [
+                "1d36056aa8ccf8c5"
+            ],
+            [],
+            []
+        ]
+    }
+]
